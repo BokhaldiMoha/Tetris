@@ -44,14 +44,14 @@ namespace Tetris.Logic
         internal void MovePieceToSide(DirectionToMove directionToMove)
         {
             if (directionToMove is DirectionToMove.Left)
-                this.EdgePosition.y--;
+                this.EdgePosition.Y--;
             else if (directionToMove is DirectionToMove.Right)
-                this.EdgePosition.y++;
+                this.EdgePosition.Y++;
         }
 
         internal void MovePieceDown()
         {
-            this.EdgePosition.x++;
+            this.EdgePosition.X++;
         }
 
         private static Color[] PieceColors = [Color.Blue, Color.Green, Color.Red, Color.Purple, Color.Brown, Color.Yellow, Color.Pink];
