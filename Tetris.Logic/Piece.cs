@@ -10,8 +10,21 @@ namespace Tetris.Logic
         public Orientation Orientation { get; set; }
         public PieceType PieceType { get; set; }
         public bool[,] Positions { get; set; }
-        public byte Width { get; set; }
         public Color Color { get; set; }
+        public IEnumerable<EdgePosition> PositionsCoordinates
+        {
+            get
+            {
+                for (int i = 0; i < Positions.GetLength(0); i++)
+                {
+                    for (int j = 0; j < Positions.GetLength(1); j++)
+                    {
+                        if (Positions[i, j])
+                            yield return new EdgePosition(EdgePosition.X + i, EdgePosition.Y + j);
+                    }
+                }
+            }
+        }
 
         public Piece(EdgePosition edgePosition, Orientation orientation, PieceType pieceType)
         {
@@ -19,7 +32,7 @@ namespace Tetris.Logic
             Orientation = orientation;
             PieceType = pieceType;
             Color = PieceColors[new Random().Next(PieceColors.Length)];
-            (Positions, Width) = CalculatePiecePositions(PieceType, Orientation);
+            Positions = CalculatePiecePositions(PieceType, Orientation);
         }
 
         internal static Piece GenerateRandomNewPiece(int mapWidth)
@@ -28,13 +41,13 @@ namespace Tetris.Logic
             return new Piece(new EdgePosition(0, mapWidth / 2), (Orientation)random.Next(Enum.GetValues(typeof(Orientation)).Length), (PieceType)random.Next(Enum.GetValues(typeof(PieceType)).Length));
         }
 
-        private static (bool[,], byte) CalculatePiecePositions(PieceType pieceType, Orientation orientation)
+        private static bool[,] CalculatePiecePositions(PieceType pieceType, Orientation orientation)
         {
             foreach (var (positions, orientations) in PieceOrientations[pieceType])
             {
                 if (orientations.Contains(orientation))
                 {
-                    return (positions, (byte)positions.Length);
+                    return positions;
                 }
             }
 

@@ -10,29 +10,25 @@ namespace Tetris.Logic
         {
             get
             {
-                return VisibleMap.Skip(4).ToArray();
+                return Map.Skip(4).ToArray();
             }
         }
 
-        private static int MinMapWidth = 10;
-        private static int MaxMapWidth = 30;
-
         private static Color BackGroundColor = Color.Black;
 
-        public Game(int mapWidth)
-        {
-            if (mapWidth < MinMapWidth || mapWidth > MaxMapWidth)
-            {
-                throw new ArgumentException($"Map width cannot be lower than {MinMapWidth} or larger than {MaxMapWidth}.");
-            }
+        private int MapHeight = 36;
+        private int MapWidth = 10;
 
-            FallingPiece = Piece.GenerateRandomNewPiece(mapWidth);
-            Map = new Color[50][];
-            foreach (var rowMap in Map)
+        public Game()
+        {
+            FallingPiece = Piece.GenerateRandomNewPiece(MapWidth);
+            Map = new Color[MapHeight + 4][];
+            for (int i = 0; i < Map.Length; i++)
             {
-                for (int i = 0; i < mapWidth; i++)
+                Map[i] = new Color[MapWidth];
+                for (int j = 0; j < MapWidth; j++)
                 {
-                    rowMap[i] = BackGroundColor;
+                    Map[i][j] = BackGroundColor;
                 }
             }
         }
@@ -42,7 +38,7 @@ namespace Tetris.Logic
             if (CheckIfPieceIsOnTheGround())
             {
                 TurnPieceIntoGround();
-                FallingPiece = Piece.GenerateRandomNewPiece(VisibleMap.Length);
+                FallingPiece = Piece.GenerateRandomNewPiece(MapWidth);
                 return;
             }
 
@@ -55,10 +51,10 @@ namespace Tetris.Logic
             {
                 for (int j = 0; j < FallingPiece.Positions.GetLength(1); j++)
                 {
-                    int xToCheck = FallingPiece.EdgePosition.X + i;
+                    int xToCheck = FallingPiece.EdgePosition.X;
                     int yToCheck = FallingPiece.EdgePosition.Y + j;
 
-                    if (Map[xToCheck + 1][yToCheck] != BackGroundColor)
+                    if (xToCheck + 1 >= Map.Length || Map[xToCheck][yToCheck] != BackGroundColor)
                         return true;
                 }
             }
@@ -85,13 +81,13 @@ namespace Tetris.Logic
 
         public void MovePieceRight()
         {
-            if (FallingPiece.Width + FallingPiece.EdgePosition.Y < Map.Length)
+            if (FallingPiece.Positions.GetLength(1) + FallingPiece.EdgePosition.Y < MapWidth)
                 FallingPiece.MovePieceToSide(DirectionToMove.Right);
         }
 
         public void MovePieceLeft()
         {
-            if (FallingPiece.EdgePosition.Y >= 0)
+            if (FallingPiece.EdgePosition.Y > 0)
                 FallingPiece.MovePieceToSide(DirectionToMove.Left);
         }
     }

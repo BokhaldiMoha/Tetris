@@ -1,0 +1,21 @@
+﻿@page "/"
+@using System.Drawing
+
+<div style="display: flex; flex-direction: column;" tabindex="0" @onkeydown="OnKeyDown">
+    @for (int i = 0; i < map.Length; i++)
+    {
+        <div style="display: flex; height: 20px;">
+            @for (int j = 0; j < map[i].Length; j++)
+            {
+                if (game.FallingPiece.PositionsCoordinates.Any(x => x.X == i && x.Y == j))
+                {
+                    <div style="width: 20px; background-color: @ColorTranslator.ToHtml(Color.FromArgb(game.FallingPiece.Color.ToArgb())) "></div>
+                }
+                else
+                {
+                    <div style="width: 20px; background-color: @ColorTranslator.ToHtml(Color.FromArgb(map[i][j].ToArgb())) "></div>
+                }
+            }
+        </div>
+    }
+</div>
