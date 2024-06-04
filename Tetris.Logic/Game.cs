@@ -10,7 +10,8 @@ namespace Tetris.Logic
         {
             get
             {
-                return Map.Skip(4).ToArray();
+                //return Map.Skip(4).ToArray();
+                return Map;
             }
         }
 
@@ -51,10 +52,13 @@ namespace Tetris.Logic
             {
                 for (int j = 0; j < FallingPiece.Positions.GetLength(1); j++)
                 {
-                    int xToCheck = FallingPiece.EdgePosition.X;
+                    if (!FallingPiece.Positions[i, j])
+                        continue;
+
+                    int xToCheck = FallingPiece.EdgePosition.X + i + 1;
                     int yToCheck = FallingPiece.EdgePosition.Y + j;
 
-                    if (xToCheck + 1 >= Map.Length || Map[xToCheck][yToCheck] != BackGroundColor)
+                    if (xToCheck >= Map.Length || Map[xToCheck][yToCheck] != BackGroundColor)
                         return true;
                 }
             }
@@ -77,6 +81,21 @@ namespace Tetris.Logic
                     }
                 }
             }
+        }
+
+        private void RecalculateMap()
+        {
+
+        }
+
+        private void ClearRow()
+        {
+
+        }
+
+        private void MoveRowsDown()
+        {
+
         }
 
         public void MovePieceRight()

@@ -26,6 +26,20 @@ namespace Tetris.Logic
             }
         }
 
+        public void SpinPiece()
+        {
+            if (Orientation == Orientation.North)
+                this.Orientation = Orientation.West;
+            else if (Orientation == Orientation.West)
+                this.Orientation = Orientation.South;
+            else if (Orientation == Orientation.South)
+                this.Orientation = Orientation.East;
+            else if (Orientation == Orientation.East)
+                this.Orientation = Orientation.North;
+
+            this.Positions = CalculatePiecePositions(this.PieceType, this.Orientation);
+        }
+
         public Piece(EdgePosition edgePosition, Orientation orientation, PieceType pieceType)
         {
             EdgePosition = edgePosition;
